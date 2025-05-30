@@ -1,12 +1,6 @@
 // src/modules/suppliers/dto/request/create-supplier.dto.ts
 import { ApiProperty } from '@nestjs/swagger'
-import {
-   IsEmail,
-   IsNotEmpty,
-   IsOptional,
-   IsString,
-   Matches
-} from 'class-validator'
+import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches } from 'class-validator'
 
 import { hostBlocklist } from '@/shared/utils'
 

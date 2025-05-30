@@ -1,10 +1,5 @@
 // src/modules/session/session.service.ts
-import {
-   Injectable,
-   InternalServerErrorException,
-   Logger,
-   NotFoundException
-} from '@nestjs/common'
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { RefreshToken } from '@prisma/client'
 import argon2 from 'argon2'
@@ -37,15 +32,13 @@ export class SessionService {
       meta: RefreshTokenMeta
    ): Promise<{ rawToken: string; session: RefreshToken }> {
       const ttl: number =
-         ms(this.configService.getOrThrow('JWT_REFRESH_EXPIRES_IN')) ??
-         this.refreshTokenTtlMs
+         ms(this.configService.getOrThrow('JWT_REFRESH_EXPIRES_IN')) ?? this.refreshTokenTtlMs
       try {
          if (!meta.device && meta.userAgent) {
             const parsed = this.detector.parse(meta.userAgent)
             const deviceType = parsed.device?.type || 'unknown'
             const osName = parsed.os?.name || 'unknown'
-            const capitalizedType =
-               deviceType.charAt(0).toUpperCase() + deviceType.slice(1)
+            const capitalizedType = deviceType.charAt(0).toUpperCase() + deviceType.slice(1)
             meta.device = `${capitalizedType} / ${osName}`
          }
 

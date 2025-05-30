@@ -12,9 +12,7 @@ import {
 export class MatchPasswordConstraint implements ValidatorConstraintInterface {
    validate(value: any, args: ValidationArguments): boolean {
       const [relatedPropertyName] = args.constraints as [string]
-      const relatedValue = (args.object as Record<string, unknown>)[
-         relatedPropertyName
-      ]
+      const relatedValue = (args.object as Record<string, unknown>)[relatedPropertyName]
       return value === relatedValue
    }
 

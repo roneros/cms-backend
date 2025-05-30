@@ -15,6 +15,7 @@ import { AppModule } from '../app.module'
 
 import { isDev, type TConfigService } from './config/env.config'
 import { RedisService } from './redis/redis.service'
+import { AllExceptionsFilter } from '@/shared/filters'
 
 async function bootstrap() {
    const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -44,11 +45,7 @@ async function bootstrap() {
       origin: configService.getOrThrow<string>('ALLOWED_ORIGINS').split(','),
       credentials: true,
       exposedHeaders: ['set-cookie'],
-      allowedHeaders: [
-         'Authorization',
-         'X-API-KEY',
-         'Content-Type: application/json'
-      ],
+      allowedHeaders: ['Authorization', 'X-API-KEY', 'Content-Type: application/json'],
       maxAge: 3600
    })
    app.use(cookieParser(configService.getOrThrow<string>('COOKIES_SECRET')))
@@ -60,15 +57,9 @@ async function bootstrap() {
          saveUninitialized: false,
          cookie: {
             domain: configService.getOrThrow<string>('SESSION_DOMAIN'),
-            maxAge: ms(
-               configService.getOrThrow<StringValue>('SESSION_MAX_AGE')
-            ),
-            httpOnly: parseBoolean(
-               configService.getOrThrow<string>('SESSION_HTTP_ONLY')
-            ),
-            secure: parseBoolean(
-               configService.getOrThrow<string>('SESSION_SECURE')
-            ),
+            maxAge: ms(configService.getOrThrow<StringValue>('SESSION_MAX_AGE')),
+            httpOnly: parseBoolean(configService.getOrThrow<string>('SESSION_HTTP_ONLY')),
+            secure: parseBoolean(configService.getOrThrow<string>('SESSION_SECURE')),
             sameSite: 'lax'
          },
          store: new RedisStore({
@@ -77,6 +68,7 @@ async function bootstrap() {
          })
       })
    )
+   app.useGlobalFilters(new AllExceptionsFilter())
    if (isDev) {
       AppModule.createSwagger(app)
       // AdminModule.createSwagger(app)
@@ -86,8 +78,7 @@ async function bootstrap() {
    await app.listen(configService.getOrThrow<number>('SERVER_PORT', 3333))
    if (isDev)
       logger.log(
-         'The server launched on the port: ' +
-            configService.getOrThrow<number>('SERVER_PORT', 7777)
+         'The server launched on the port: ' + configService.getOrThrow<number>('SERVER_PORT', 7777)
       )
 }
 void bootstrap()

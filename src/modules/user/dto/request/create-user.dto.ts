@@ -2,15 +2,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Role } from '@prisma/client'
 import { Type } from 'class-transformer'
-import {
-   IsEmail,
-   IsEnum,
-   IsNotEmpty,
-   IsOptional,
-   IsString,
-   Length,
-   Matches
-} from 'class-validator'
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, Length, Matches } from 'class-validator'
 
 import { hostBlocklist } from '@/shared/utils'
 
@@ -19,8 +11,7 @@ export class CreateUserDto {
    @IsNotEmpty({ message: 'displayName is required' })
    @IsString({ message: 'displayName must be a string' })
    @Matches(/^[a-z0-9]+$/, {
-      message:
-         'Имя пользователя может содержать только строчные латинские буквы и цифры'
+      message: 'Имя пользователя может содержать только строчные латинские буквы и цифры'
    })
    username: string
 

@@ -1,10 +1,5 @@
 // src/shared/guards/blocked-user.guard.ts
-import {
-   CanActivate,
-   ExecutionContext,
-   ForbiddenException,
-   Injectable
-} from '@nestjs/common'
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common'
 
 import { PrismaService } from '@/core/prisma/prisma.service'
 

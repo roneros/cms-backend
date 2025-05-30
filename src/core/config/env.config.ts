@@ -4,9 +4,7 @@ import { z } from 'zod'
 dotenv.config()
 
 export const envSchema = z.object({
-   NODE_ENV: z
-      .enum(['development', 'production', 'test'])
-      .default('development'),
+   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
    SERVER_PORT: z.coerce.number().default(3000), // coerce превращает из string в number
    SERVER_URL: z.string().optional(),

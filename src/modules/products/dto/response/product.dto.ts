@@ -20,9 +20,14 @@ export class ProductResponseDto {
    @ApiProperty() discount: Number
    @ApiProperty() country: string
 
-   @ApiProperty() categories: CategoryResponseDto[]
-   @ApiProperty() suppliers: SupplierResponseDto[]
-   @ApiProperty() storage: StorageResponseDto[]
+   @ApiProperty({ type: () => CategoryResponseDto, isArray: true })
+   categories: CategoryResponseDto[]
+
+   @ApiProperty({ type: () => SupplierResponseDto, isArray: true })
+   suppliers: SupplierResponseDto[]
+
+   @ApiProperty({ type: () => StorageResponseDto, isArray: true })
+   storage: StorageResponseDto[]
 
    @ApiProperty() createdAt: Date
    @ApiProperty() updatedAt: Date

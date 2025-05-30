@@ -26,9 +26,7 @@ export class SessionController {
    constructor(private readonly sessionService: SessionService) {}
 
    @Get()
-   async getSessions(
-      @Req() req: RequestWithUser
-   ): Promise<GetSessionsResponse> {
+   async getSessions(@Req() req: RequestWithUser): Promise<GetSessionsResponse> {
       const userId = req.user.userId
       this.logger.log(`Fetch sessions for ${userId}`)
 

@@ -13,8 +13,8 @@ import { ProductsModule } from './modules/products/products.module'
 import { SessionModule } from './modules/session/session.module'
 import { StorageModule } from './modules/storage/storage.module'
 import { SuppliersModule } from './modules/suppliers/suppliers.module'
+import { UserModule } from './modules/user/user.module'
 import { BlockedUserGuard, JwtAuthGuard, JwtStrategy } from './shared/guards'
-import { UserModule } from './modules/user/user.module';
 
 const path = '/docs'
 
@@ -71,10 +71,7 @@ export class AppModule {
             .setTitle('BerryKids - API')
             .setDescription('Документация API BerryKids')
             .setVersion('1.0')
-            .addBearerAuth(
-               { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-               'access-token'
-            )
+            .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'access-token')
             .build(),
          { include: [AppModule], deepScanRoutes: true }
       )

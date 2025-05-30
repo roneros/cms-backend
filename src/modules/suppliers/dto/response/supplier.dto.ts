@@ -1,6 +1,7 @@
 // src/modules/suppliers/dto/response/supplier.dto.ts
-import { ProductResponseDto } from '@/modules/products/dto'
 import { ApiProperty } from '@nestjs/swagger'
+
+import { ProductResponseDto } from '@/modules/products/dto'
 
 export class SupplierResponseDto {
    @ApiProperty({ description: 'ID' })

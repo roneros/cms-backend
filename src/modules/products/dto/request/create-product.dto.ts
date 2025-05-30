@@ -1,8 +1,10 @@
+// src/modules/product/dto/request/create-product.dto.ts
 import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 import {
    ArrayUnique,
    IsArray,
+   IsDecimal,
    IsInt,
    IsNotEmpty,
    IsOptional,
@@ -12,87 +14,91 @@ import {
    ValidateNested
 } from 'class-validator'
 
-import { CreateCategoryDto } from '@/modules/categories/dto'
 import { CreateStorageDto } from '@/modules/storage/dto'
-import { CreateSupplierDto } from '@/modules/suppliers/dto'
 
-// src/modules/product/dto/request/create-product.dto.ts
 export class CreateProductDto {
-   @ApiProperty()
+   @ApiProperty({ type: String })
    @IsNotEmpty()
    @IsString()
    name: string
 
-   @ApiProperty()
-   @IsNotEmpty()
+   @ApiProperty({ type: Number })
    @Type(() => Number)
+   @IsNotEmpty()
    @IsInt()
    @Min(0)
    amount: number
 
-   @ApiProperty()
+   @ApiProperty({ type: String })
    @IsNotEmpty()
-   @Type(() => String)
-   @IsString()
+   @IsDecimal({ decimal_digits: '1,2' })
    price: string // Перед сохранение в DB: new Prisma.Decimal(price)
 
-   @ApiProperty()
+   @ApiProperty({ type: String })
    @IsNotEmpty()
-   @Type(() => String)
-   @IsString()
+   @IsDecimal({ decimal_digits: '1,2' })
    priceBuy: string // Перед сохранение в DB: new Prisma.Decimal(priceBuy)
 
-   @ApiProperty()
+   @ApiProperty({ type: String })
    @IsNotEmpty()
-   @Type(() => String)
-   @IsString()
+   @IsDecimal({ decimal_digits: '1,2' })
    percent: string // Перед сохранение в DB: new Prisma.Decimal(percent)
 
-   @ApiProperty()
+   @ApiProperty({ type: String })
    @IsNotEmpty()
-   @Type(() => String)
-   @IsString()
+   @IsDecimal({ decimal_digits: '1,2' })
    margin: string // Перед сохранение в DB: new Prisma.Decimal(margin)
 
-   @ApiProperty()
+   @ApiProperty({ type: String })
    @IsNotEmpty()
-   @Type(() => String)
-   @IsString()
+   @IsDecimal({ decimal_digits: '1,2' })
    profit: string // Перед сохранение в DB: new Prisma.Decimal(profit)
 
-   @ApiProperty({ required: false })
+   @ApiProperty({ type: Number, required: false, default: 0 })
    @IsOptional()
    @Type(() => Number)
    @IsInt()
    @Min(0)
    discount?: number
 
-   @ApiProperty()
+   @ApiProperty({ type: String, required: false })
    @IsOptional()
    @IsString()
    country?: string
 
-   @ApiProperty({ type: [CreateCategoryDto], required: false })
-   @Type(() => CreateCategoryDto)
+   @ApiProperty({
+      type: String,
+      isArray: true,
+      required: false,
+      description: 'UUID категорий'
+   })
    @IsOptional()
    @IsArray()
    @ArrayUnique()
    @IsUUID('4', { each: true })
-   categoryIds?: CreateCategoryDto[]
+   categoryIds?: string[]
 
-   @ApiProperty({ type: [CreateSupplierDto], required: false })
-   @Type(() => CreateSupplierDto)
+   @ApiProperty({
+      type: String,
+      isArray: true,
+      required: false,
+      description: 'UUID поставщиков'
+   })
    @IsOptional()
    @IsArray()
    @ArrayUnique()
    @IsUUID('4', { each: true })
-   supplierIds?: CreateSupplierDto[]
+   supplierIds?: string[]
 
-   @ApiProperty({ type: [CreateStorageDto], required: false })
-   @Type(() => CreateStorageDto)
+   @ApiProperty({
+      type: () => CreateStorageDto,
+      isArray: true,
+      required: false,
+      description: 'Медиа-файлы (уже загруженные на Cloudinary)'
+   })
    @IsOptional()
    @IsArray()
-   @ArrayUnique()
-   // @ValidateNested({ each: true }) // что это такое вообще )
-   storageIds?: CreateStorageDto[]
+   @ValidateNested({ each: true }) // валидировать каждый элемент по CreateMediaDto
+   @Type(() => CreateStorageDto) // превратить каждый plain-object → CreateMediaDto
+   storage?: CreateStorageDto[]
 }

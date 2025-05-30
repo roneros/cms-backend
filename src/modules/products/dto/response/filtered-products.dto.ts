@@ -4,7 +4,7 @@ import { ProductResponseDto } from './product.dto'
 
 // src/modules/product/dto/response/filtered-products.dto.ts
 export class FindAllProductsResponseDto {
-   @ApiProperty({ type: () => [ProductResponseDto] })
+   @ApiProperty({ type: () => ProductResponseDto, isArray: true })
    data: ProductResponseDto[]
 
    @ApiProperty() page: number
