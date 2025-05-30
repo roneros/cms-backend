@@ -14,10 +14,10 @@ model User {
   username     String         @unique
   password     String
   displayName  String         @map("display_name")
+  role         Role           @default(CASHIER)
   email        String?        @unique
   phoneNumber  String?        @map("phone_number")
   isBlocked    Boolean        @default(false) @map("is_blocked")
-  role         Role           @default(CASHIER)
   refreshToken RefreshToken[]
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -63,11 +63,11 @@ model Product {
   profit      Decimal
   discount    Int     @default(0)
   country     String?
-  isPublished Boolean @default(true) @map("is_published")
+  // isPublished Boolean @default(true) @map("is_published")
 
   categories Category[]
-  providers  Supplier[]
-  media      ProductMedia[]
+  suppliers  Supplier[]
+  storage    Storage[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -75,24 +75,30 @@ model Product {
   @@map("products")
 }
 
-model ProductMedia {
-  id        String   @id @default(uuid())
-  productId String   @map("product_id")
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+model Storage {
+  id        String      @id @default(uuid())
+  productId String      @map("product_id")
+  product   Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  type      StorageType 
   size      String // e.g. 'thumb', 'medium', 'full', 'video'
   url       String // secure_url от Cloudinary
-  publicId  String   @map("public_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  publicId  String      @map("public_id")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
 
   @@map("product_media")
+}
+
+enum StorageType {
+  IMAGE
+  VIDEO
 }
 
 model Category {
   id        String    @id @default(uuid())
   slug      String    @unique
   name      String
-  product   Product[]
+  products   Product[]
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
 
@@ -103,14 +109,14 @@ model Supplier {
   id          String  @id @default(uuid())
   slug        String  @unique
   name        String
-  number      String?
   email       String?
   website     String?
   address     String?
   requisite   String?
   description String?
+  phoneNumber String? @default("phone_number")
 
-  product Product[]
+  products Product[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

@@ -1,30 +1,48 @@
 // src/modules/product/dto/request/query-products.dto.ts
+import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator'
+import {
+   IsArray,
+   IsBoolean,
+   IsInt,
+   IsOptional,
+   IsString,
+   IsUUID,
+   Max,
+   Min,
+   ValidateNested
+} from 'class-validator'
 
 export class QueryProductsDto {
+   @ApiProperty()
+   @IsOptional()
    @IsString()
-   @IsOptional()
-   name?: string
+   search?: string
 
-   @IsUUID()
+   @ApiProperty()
    @IsOptional()
-   categoryId?: string
+   categorySlugs?: string
 
-   @IsUUID()
+   @ApiProperty()
    @IsOptional()
-   providerId?: string
+   supplierSlugs?: string
 
+   @ApiProperty()
    @Type(() => Number)
+   @IsOptional()
    @IsInt()
    @Min(1)
-   @IsOptional()
    page?: number = 1
 
+   @ApiProperty()
    @Type(() => Number)
+   @IsOptional()
    @IsInt()
    @Min(1)
    @Max(100)
-   @IsOptional()
    limit?: number = 20
+
+   // @Type(() => Boolean)
+   // @IsBoolean()
+   // isPublished?: boolean
 }

@@ -4,17 +4,17 @@ import { APP_GUARD } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { LoggerModule } from 'nestjs-pino'
 
-import { CloudinaryModule } from './common/cloudinary/cloudinary.module'
 import { isDev } from './core/config/env.config'
 import { PrismaModule } from './core/prisma/prisma.module'
 import { RedisModule } from './core/redis/redis.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { CategoriesModule } from './modules/categories/categories.module'
-import { ProductsMediaModule } from './modules/products-media/products-media.module'
 import { ProductsModule } from './modules/products/products.module'
 import { SessionModule } from './modules/session/session.module'
+import { StorageModule } from './modules/storage/storage.module'
 import { SuppliersModule } from './modules/suppliers/suppliers.module'
 import { BlockedUserGuard, JwtAuthGuard, JwtStrategy } from './shared/guards'
+import { UserModule } from './modules/user/user.module';
 
 const path = '/docs'
 
@@ -56,11 +56,11 @@ const path = '/docs'
       PrismaModule,
       SessionModule,
       AuthModule,
-      CloudinaryModule,
       ProductsModule,
       CategoriesModule,
-      ProductsMediaModule,
-      SuppliersModule
+      SuppliersModule,
+      StorageModule,
+      UserModule
    ]
 })
 export class AppModule {

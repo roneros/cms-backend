@@ -1,11 +1,10 @@
-export class SessionResponseDto {
-   id: string
-   createdAt: Date
-   expiresAt: Date
-   ip?: string
-   userAgent?: string
+import { ApiProperty } from '@nestjs/swagger'
 
-   constructor(partial: Partial<SessionResponseDto>) {
-      Object.assign(this, partial)
-   }
+// src/modules/session/dto/session-response.dto.ts
+export class SessionResponseDto {
+   @ApiProperty() id: string
+   @ApiProperty() createdAt: Date
+   @ApiProperty() expiresAt: Date
+   @ApiProperty() ip?: string
+   @ApiProperty() userAgent?: string
 }
