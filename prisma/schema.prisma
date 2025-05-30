@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model User {
+  id String @id @unique @default(cuid())
+
+  username     String         @unique
+  password     String
+  displayName  String         @map("display_name")
+  email        String?        @unique
+  phoneNumber  String?        @map("phone_number")
+  isBlocked    Boolean        @default(false) @map("is_blocked")
+  role         Role           @default(CASHIER)
+  refreshToken RefreshToken[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+enum Role {
+  CASHIER
+  STOREKEEPER
+  MANAGER
+  ADMIN
+
+  @@map("roles")
+}
+
+model RefreshToken {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  ip          String?
+  hashedToken String  @map("hashed_token")
+  userAgent   String? @map("user_agent")
+  device      String?
+
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("refresh_token")
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  article     Int     @unique @default(autoincrement())
+  name        String
+  amount      Int
+  price       Decimal // цена продажи
+  priceBuy    Decimal @map("price_buy") // цена покупки
+  percent     Decimal
+  margin      Decimal
+  profit      Decimal
+  discount    Int     @default(0)
+  country     String?
+  isPublished Boolean @default(true) @map("is_published")
+
+  categories Category[]
+  providers  Supplier[]
+  media      ProductMedia[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("products")
+}
+
+model ProductMedia {
+  id        String   @id @default(uuid())
+  productId String   @map("product_id")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size      String // e.g. 'thumb', 'medium', 'full', 'video'
+  url       String // secure_url от Cloudinary
+  publicId  String   @map("public_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("product_media")
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  slug      String    @unique
+  name      String
+  product   Product[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("categories")
+}
+
+model Supplier {
+  id          String  @id @default(uuid())
+  slug        String  @unique
+  name        String
+  number      String?
+  email       String?
+  website     String?
+  address     String?
+  requisite   String?
+  description String?
+
+  product Product[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("suppliers")
+}
+
+model Client {
+  id          String  @id @default(cuid())
+  name        String
+  number      String?
+  address     String?
+  dob         String?
+  gender      Gender?
+  description String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("clients")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+
+  @@map("genders")
+}

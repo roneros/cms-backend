@@ -1,0 +1,49 @@
+{
+   "compilerOptions": {
+      "module": "commonjs",
+      "declaration": true,
+      "removeComments": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "allowSyntheticDefaultImports": true,
+      "target": "ES2023",
+      "sourceMap": true,
+      "outDir": "./dist",
+      "baseUrl": "./",
+      "incremental": true,
+      "skipLibCheck": true,
+      "strictNullChecks": true,
+      "forceConsistentCasingInFileNames": true,
+      "noImplicitAny": false,
+      "strictBindCallApply": false,
+      "noFallthroughCasesInSwitch": false,
+
+      "paths": {
+         "@/*": ["src/*"]
+      },
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "moduleResolution": "node",
+      "jsx": "react",
+      "strict": true,
+      "strictPropertyInitialization": false,
+      "plugins": [
+         {
+            "name": "@nestjs/swagger/plugin",
+            "options": {
+               "dtoFileNameSuffix": [".dto.ts"],
+               "controllerFileNameSuffix": [".controller.ts"],
+               "introspectComments": true
+            }
+         }
+      ]
+   },
+   "include": [
+      "src/**/*",
+      ".config/recaptcha.config.ts",
+      ".config/security.config.ts",
+      ".config/email-blacklist.config.ts",
+      ".config/mailer.config.ts"
+   ],
+   "exclude": ["node_modules", "test", "dist", ".main"]
+}

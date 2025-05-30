@@ -1,0 +1,1 @@
+npm install @react-email/components @react-email/render react react-dom
